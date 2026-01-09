@@ -17,7 +17,7 @@ import {
   Store,
   Briefcase
 } from 'lucide-react';
-import { companyInfo, images, whoWeServe, whyChooseUs, testimonials } from '../../data/mock';
+import { companyInfo, images, whoWeServe, whyChooseUs, testimonials } from '../data/mock';
 
 const iconMap = {
   Building: Building,
