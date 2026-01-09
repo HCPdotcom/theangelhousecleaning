@@ -14,7 +14,7 @@ import {
   CalendarCheck,
   Repeat
 } from 'lucide-react';
-import { companyInfo, residentialServices, images } from '../../data/mock';
+import { companyInfo, residentialServices, images } from '../data/mock';
 
 const iconMap = {
   Home: Home,
