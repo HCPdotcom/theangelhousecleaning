@@ -15,7 +15,7 @@ import {
   Users,
   CalendarCheck
 } from 'lucide-react';
-import { companyInfo, commercialServices, images } from '../../data/mock';
+import { companyInfo, commercialServices, images } from '../data/mock';
 
 const iconMap = {
   Building2: Building2,
