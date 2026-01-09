@@ -12,7 +12,7 @@ import {
   Handshake,
   ArrowRight
 } from 'lucide-react';
-import { companyInfo } from '../../data/mock';
+import { companyInfo } from '../data/mock';
 import { toast } from 'sonner';
 
 const ContactPage = () => {
