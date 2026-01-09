@@ -12,7 +12,7 @@ import {
   Star,
   Heart
 } from 'lucide-react';
-import { companyInfo, images } from '../../data/mock';
+import { companyInfo, images } from '../data/mock';
 
 const AboutPage = () => {
   return (
