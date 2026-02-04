@@ -6,7 +6,6 @@ export const companyInfo = {
   phone: "972-836-8242",
   email: "theangelhc@gmail.com",
   address: {
-    street: "P.O. Box 746",
     city: "Frisco",
     state: "TX",
     zip: "75034"
