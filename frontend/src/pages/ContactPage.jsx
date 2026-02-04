@@ -142,8 +142,9 @@ const ContactPage = () => {
                     <MapPin className="text-[#66CC33]" size={24} />
                   </div>
                   <div>
-                    <div className="text-white font-semibold mb-1">Location</div>
+                    <div className="text-white font-semibold mb-1">Address</div>
                     <div className="text-[#a0a0b0]">
+                      {companyInfo.address.street}<br />
                       {companyInfo.address.city}, {companyInfo.address.state} {companyInfo.address.zip}
                     </div>
                   </div>
