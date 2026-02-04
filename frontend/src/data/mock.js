@@ -6,9 +6,10 @@ export const companyInfo = {
   phone: "972-836-8242",
   email: "theangelhc@gmail.com",
   address: {
-    city: "Frisco",
+    street: "5465 Legacy Drive Suite 650",
+    city: "Plano",
     state: "TX",
-    zip: "75034"
+    zip: "75024"
   },
   serviceArea: "Dallas-Fort Worth (DFW) Metroplex",
   foundedYear: 2005,
