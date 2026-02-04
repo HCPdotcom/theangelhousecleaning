@@ -16,7 +16,7 @@ export const companyInfo = {
 };
 
 export const images = {
-  hero: "https://images.unsplash.com/photo-1761689502577-0013be84f1bf?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2NDF8MHwxfHNlYXJjaHwzfHxqYW5pdG9yaWFsJTIwc2VydmljZXN8ZW58MHx8fHwxNzY3OTMzMzk5fDA&ixlib=rb-4.1.0&q=85",
+  hero: "https://customer-assets.emergentagent.com/job_angel-janitorial/artifacts/bzg1piap_AdobeStock_291306413_Preview.jpeg",
   commercial: "https://images.unsplash.com/photo-1437326300822-01d8f13c024f?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NjZ8MHwxfHNlYXJjaHwyfHxwcm9mZXNzaW9uYWwlMjBjbGVhbmluZ3xlbnwwfHx8fDE3Njc5MzMzOTR8MA&ixlib=rb-4.1.0&q=85",
   team: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NjZ8MHwxfHNlYXJjaHwxfHxwcm9mZXNzaW9uYWwlMjBjbGVhbmluZ3xlbnwwfHx8fDE3Njc5MzMzOTR8MA&ixlib=rb-4.1.0&q=85",
   carpet: "https://images.unsplash.com/photo-1742483359033-13315b247c74?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NjZ8MHwxfHNlYXJjaHwzfHxwcm9mZXNzaW9uYWwlMjBjbGVhbmluZ3xlbnwwfHx8fDE3Njc5MzMzOTR8MA&ixlib=rb-4.1.0&q=85",
