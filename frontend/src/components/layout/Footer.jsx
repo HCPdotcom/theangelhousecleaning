@@ -45,7 +45,7 @@ const Footer = () => {
               />
             </Link>
             <p className="text-[#a0a0b0] mb-6 leading-relaxed">
-              Professional commercial and residential cleaning services serving the DFW metroplex since 2005.
+              Professional commercial and residential cleaning services across Dallas, North Dallas, and surrounding communities since 2005.
             </p>
             <p className="text-[#66CC33] font-semibold italic">
               "{companyInfo.tagline}"
@@ -180,7 +180,7 @@ const Footer = () => {
               </Link>
               <span className="text-[#a0a0b0]/40 hidden md:inline">·</span>
               <p className="text-[#a0a0b0] text-sm">
-                Fully Licensed &amp; Insured | Serving DFW Since {companyInfo.foundedYear}
+                Fully Licensed &amp; Insured | Serving Dallas &amp; North Dallas Since {companyInfo.foundedYear}
               </p>
             </div>
           </div>

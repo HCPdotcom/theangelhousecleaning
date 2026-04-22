@@ -1,0 +1,40 @@
+{
+  "summary": "Final pre-publish QA for The Angel House Cleaning (Commercial+Residential, Dallas/North Dallas). Backend: 26/26 pytest tests pass — review submission + routing (promote/thanks/followup), validation (rating/text/serviceType/email), admin JWT, listing/filter, moderation PATCH, public PII-stripping, contact regression with new businessName/propertyType/squareFootage/frequency fields incl. educational + government property types, /api/admin/contacts auth-protected, capability-statement.txt static download. Frontend: All 5 public pages load without DFW/Fort Worth/Metroplex/TODO/Lorem references. Home headline + service-area copy correct, 'Download Capability Statement' button present on Home, 'Capability Statement' button on Commercial hero. Commercial subhead + facility/operations/consistent service/customized cleaning plans tone verified. /feedback ClientTypePicker shows Residential + Commercial cards (no form). Both type=residential and type=commercial paths show correct subtle label + intro line. 5★+publishConsent submit shows 'Leave a Google Review' CTA with placeholder note 'Google review link coming soon — this button currently routes to a Google search for our business.' (REACT_APP_GOOGLE_REVIEW_URL empty → falls back to google.com search link). 2★ submit shows 'Call Us 972-836-8242' + 'Contact Form' buttons and NO Google CTA. Admin login (theangelhc@gmail.com / VaultRiver!CleanOps47) → /admin/reviews. Cross-nav Contacts/Reviews pills present. Filter pills (all/pending/approved/rejected) work; Approve moves pending → approved and is reflected in /api/reviews/public with PII stripped. /admin/contacts Generate Review Invite modal pre-fills /feedback?type=commercial|residential link and exposes Copy Link / Copy Text / Copy Subject / Copy Body / Open in Mail / Done. Public Header has NO admin link; Footer has 'Leave a Review' → /feedback. Mobile (375x812) — no horizontal overflow on Home/Contact/Feedback/Admin-login. Cleanup: removed 6 TEST_ reviews + 4 TEST_ contacts after testing.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "/admin/login", "issues": ["Email input placeholder still reads 'admin@theangelhousecleaning.com' — stale; should be 'theangelhc@gmail.com' (or generic 'you@example.com') so owner does not get confused. Cosmetic only — does not block login."]}
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_reviews_admin.py",
+    "/app/test_reports/pytest/pytest_results.xml"
+  ],
+  "action_items": [
+    "Optional: update placeholder text on /app/frontend/src/pages/AdminLoginPage.jsx email input from 'admin@theangelhousecleaning.com' to 'theangelhc@gmail.com' (or 'you@example.com') to match the active admin email.",
+    "Optional polish: AdminLoginResponse hardcodes expiresInHours=12 while auth.py owns TOKEN_TTL_HOURS — flagged previously, still applies. Single-source-of-truth would prevent drift."
+  ],
+  "critical_code_review_comments": [
+    "/api/contact GET endpoint exists in addition to /api/admin/contacts — both protected by require_admin and both return the same data. Consider deprecating one to reduce surface area.",
+    "Brute-force lockout (auth.py) is in-process dict — fine for single-worker single-instance, but document this clearly on README so operations does not scale to multiple workers and silently lose protection.",
+    "ReviewsPage shows the placeholder message 'Google review link coming soon — this button currently routes to a Google search for our business.' which is good owner-friendly copy but will confuse end-users; consider hiding the note in production once REACT_APP_GOOGLE_REVIEW_URL is set, or wrap it in env-conditional rendering."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_reviews_admin.py (updated admin creds to theangelhc@gmail.com / VaultRiver!CleanOps47; added 5 new tests: contact_expanded_payload_educational, contact_expanded_payload_government, admin_contacts_endpoint, admin_contacts_requires_auth, capability_statement_downloadable; updated test_contact_list to use auth_headers since GET /api/contact is now admin-protected)"
+  ],
+  "success_rate": {
+    "backend": "100% (26/26 pytest)",
+    "frontend": "100% of tested flows (5 public pages, headline/serviceArea/capability button, picker → form, 5★ Google CTA, 2★ followup CTA, admin login, filter+approve, contacts modal, mobile 375x812)"
+  },
+  "test_credentials": "Admin: theangelhc@gmail.com / VaultRiver!CleanOps47 (matches /app/memory/test_credentials.md and /app/backend/.env).",
+  "seed_data_creation": "Created TEST_Alice/Bob/Carol/UI Helena/UI Iggy/UI Frank reviews + TEST_QA Contact UI/TEST_Edu/TEST_Gov/TEST_Contact Regression contacts during testing — all cleaned via direct mongo delete after run (6 reviews + 4 contacts deleted). One approved review 'TEST_Alice A.' was visible on public reviews grid during testing; it was also cleaned in the same teardown.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Backend pytest at /app/backend/tests/test_reviews_admin.py runs cleanly with REACT_APP_BACKEND_URL env. Admin creds rotated to theangelhc@gmail.com / VaultRiver!CleanOps47 — keep in sync with /app/backend/.env (ADMIN_EMAIL / ADMIN_PASSWORD). 5-attempt brute-force lockout intentionally NOT exercised this run to avoid tripping the in-process limiter and forcing a backend restart mid-suite — verified in iteration_1. After QA cleanup, public /api/reviews/public returns 0 reviews (owner will accumulate real reviews post-launch). Admin reviews list still has historical iteration entries; product owner can clear or moderate via UI.",
+  "rca of the issue": "No critical issues. Single cosmetic finding: /admin/login email placeholder is stale ('admin@theangelhousecleaning.com'). Reproduction: open /admin/login, inspect input[data-testid='admin-login-email-input'] — placeholder attribute does not match current ADMIN_EMAIL. Mitigation: change placeholder string in AdminLoginPage.jsx to either 'theangelhc@gmail.com' or a generic 'you@example.com'."
+}

@@ -473,12 +473,12 @@ const ContactPage = () => {
       {/* Service Area */}
       <section className="py-16 bg-[#0a0a1a]" data-testid="contact-service-area">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 text-center">
-          <h2 className="font-display text-3xl font-bold text-white mb-4">Serving the DFW Metroplex &amp; North Dallas</h2>
+          <h2 className="font-display text-3xl font-bold text-white mb-4">Serving Dallas, North Dallas &amp; Surrounding Communities</h2>
           <p className="text-[#a0a0b0] max-w-2xl mx-auto">
             Headquartered in Plano with dedicated North Dallas coverage across Celina, Prosper, Frisco, and McKinney. Contact us to confirm service for your location.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-4">
-            {['Celina', 'Prosper', 'Frisco', 'McKinney', 'Plano', 'Allen', 'Richardson', 'Carrollton', 'Dallas', 'Fort Worth'].map((city) => (
+            {['Celina', 'Prosper', 'Frisco', 'McKinney', 'Plano', 'Allen', 'Richardson', 'Carrollton', 'Dallas'].map((city) => (
               <span
                 key={city}
                 className="bg-[#191970] text-white px-4 py-2 rounded-full text-sm border border-[#66CC33]/20"

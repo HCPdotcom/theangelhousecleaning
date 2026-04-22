@@ -50,18 +50,13 @@ const processSteps = [
   { icon: Repeat, step: 'Step 3', title: 'Ongoing Service', desc: 'Dedicated crews, supervisor checks, and quarterly reviews to tune the plan.' }
 ];
 
-const serviceCities = [
-  'Celina', 'Prosper', 'Frisco', 'McKinney', 'Plano', 'Allen',
-  'Richardson', 'Carrollton', 'Dallas', 'Fort Worth'
-]; // Kept for reference — no longer rendered; Home uses general copy per positioning update.
-
 const HomePage = () => {
   return (
     <div className="overflow-hidden" data-testid="home-page">
       {/* Hero */}
       <section className="relative min-h-screen flex items-center" data-testid="home-hero">
         <div className="absolute inset-0">
-          <img src={images.hero} alt="DFW Commercial Cleaning Partner" className="w-full h-full object-cover" />
+          <img src={images.hero} alt="Commercial and Residential Cleaning Partner" className="w-full h-full object-cover" />
           <div className="absolute inset-0 hero-overlay" />
         </div>
 
@@ -73,7 +68,7 @@ const HomePage = () => {
             </div>
 
             <h1 className="font-display text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight mb-6">
-              Your DFW Commercial <span className="text-[#66CC33]">&amp; Residential Cleaning Partner</span> Since 2005
+              Your Trusted Commercial <span className="text-[#66CC33]">&amp; Residential Cleaning Partner</span> Across Dallas &amp; North Dallas
             </h1>
 
             <p className="text-xl text-white/80 mb-8 leading-relaxed max-w-2xl">
@@ -196,7 +191,7 @@ const HomePage = () => {
               Facilities We Keep Running
             </h2>
             <p className="text-[#a0a0b0] text-lg max-w-2xl mx-auto">
-              Commercial and public-sector buildings across the DFW metroplex.
+              Commercial and public-sector buildings across Dallas and North Dallas.
             </p>
           </div>
 
@@ -354,7 +349,7 @@ const HomePage = () => {
                 Two Decades of Reliable Service
               </h2>
               <p className="text-[#a0a0b0] text-lg mb-8 leading-relaxed">
-                Since 2005, DFW businesses have trusted us to show up, document the work, and hold our teams to the same written standard every visit. Our clients renew because reliability compounds.
+                Since 2005, businesses across Dallas and North Dallas have trusted us to show up, document the work, and hold our teams to the same written standard every visit. Our clients renew because reliability compounds.
               </p>
               <div className="grid sm:grid-cols-2 gap-5">
                 <div className="flex gap-4">
@@ -403,7 +398,7 @@ const HomePage = () => {
               </div>
               <div className="absolute -bottom-8 -left-8 bg-[#191970] rounded-2xl p-6 shadow-xl">
                 <div className="text-[#66CC33] text-4xl font-bold">{new Date().getFullYear() - companyInfo.foundedYear}+</div>
-                <div className="text-white/80 text-sm">Years Serving DFW</div>
+                <div className="text-white/80 text-sm">Years of Service</div>
               </div>
               <div className="absolute -top-4 -right-4 bg-[#66CC33] rounded-2xl p-4 shadow-xl">
                 <div className="flex items-center gap-1 mb-1">

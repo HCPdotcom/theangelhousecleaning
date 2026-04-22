@@ -35,7 +35,7 @@ const AboutPage = () => {
             </h1>
             
             <p className="text-xl text-white/80 leading-relaxed">
-              A family-owned professional cleaning company serving the Dallas-Fort Worth metroplex with integrity and excellence.
+              A family-owned professional cleaning company serving Dallas, North Dallas, and surrounding communities with integrity and excellence.
             </p>
           </div>
         </div>
@@ -54,7 +54,7 @@ const AboutPage = () => {
                 For many years, our slogan "Quality Within Reach" has inspired the culture that has powered our organization. We believe professional cleaning services should be accessible to everyone—from growing businesses to busy families.
               </p>
               <p className="text-[#a0a0b0] text-lg mb-8 leading-relaxed">
-                Founded in 2005, The Angel House Cleaning has grown from a small family operation into a trusted name across the DFW metroplex. Our commitment to quality, reliability, and customer satisfaction remains at the core of everything we do.
+                Founded in 2005, The Angel House Cleaning has grown from a small family operation into a trusted name across Dallas and North Dallas. Our commitment to quality, reliability, and customer satisfaction remains at the core of everything we do.
               </p>
 
               <div className="flex flex-wrap gap-4">
@@ -160,7 +160,7 @@ const AboutPage = () => {
               <div className="text-white/80">Satisfied Clients</div>
             </div>
             <div className="text-center">
-              <div className="text-[#66CC33] text-5xl md:text-6xl font-bold mb-2">DFW</div>
+              <div className="text-[#66CC33] text-4xl md:text-5xl font-bold mb-2">Dallas<span className="text-white/80 text-2xl md:text-3xl"> &amp; </span>North Dallas</div>
               <div className="text-white/80">Service Area</div>
             </div>
           </div>
@@ -190,7 +190,7 @@ const AboutPage = () => {
                 Professional Staff, Exceptional Results
               </h2>
               <p className="text-[#a0a0b0] text-lg mb-6 leading-relaxed">
-                Our excellent staff of experienced cleaners has been responsible for the routine cleaning of countless homes and offices throughout the DFW area, gaining a reputation for being respectful along the way.
+                Our excellent staff of experienced cleaners has been responsible for the routine cleaning of countless homes and offices across Dallas and North Dallas, gaining a reputation for being respectful along the way.
               </p>
               <p className="text-[#a0a0b0] text-lg mb-8 leading-relaxed">
                 We take great pride in what we do, providing a high quality of cleanliness for both commercial and residential clients. Every team member is trained, insured, and committed to delivering consistent, outstanding results.
@@ -216,7 +216,7 @@ const AboutPage = () => {
             Ready to Experience the Difference?
           </h2>
           <p className="text-[#a0a0b0] text-lg mb-8 max-w-2xl mx-auto">
-            Contact us today for a free quote. We'd love to show you why businesses and homeowners across the DFW trust The Angel House Cleaning.
+            Contact us today for a free quote. We'd love to show you why businesses and homeowners across Dallas and North Dallas trust The Angel House Cleaning.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/contact" className="btn-primary text-lg py-4 px-8">

@@ -108,10 +108,10 @@ const CommercialPage = () => {
           <div className="text-center mb-16">
             <span className="text-[#66CC33] font-semibold text-sm uppercase tracking-wider">Our Services</span>
             <h2 className="font-display text-4xl md:text-5xl font-bold text-white mt-4 mb-6">
-              Comprehensive Commercial Solutions
+              Comprehensive Facility Services
             </h2>
             <p className="text-[#a0a0b0] text-lg max-w-2xl mx-auto">
-              We offer a full range of commercial cleaning services to keep your business running smoothly and looking professional.
+              A full suite of commercial cleaning and facility services, delivered through customized cleaning plans that keep your operations running with consistent service visit after visit.
             </p>
           </div>
 
@@ -167,8 +167,8 @@ const CommercialPage = () => {
                     <CheckCircle className="text-[#66CC33]" size={24} />
                   </div>
                   <div>
-                    <h3 className="text-white font-semibold text-lg mb-2">Consistency, In Writing</h3>
-                    <p className="text-[#a0a0b0]">A defined scope-of-work and scheduled cadence — the same standard held every visit, backed by a real service agreement.</p>
+                    <h3 className="text-white font-semibold text-lg mb-2">Consistent Service, In Writing</h3>
+                    <p className="text-[#a0a0b0]">A defined scope-of-work and scheduled cadence — the same standard held every visit across your facility, backed by a real service agreement.</p>
                   </div>
                 </div>
 
@@ -187,8 +187,8 @@ const CommercialPage = () => {
                     <CheckCircle className="text-[#66CC33]" size={24} />
                   </div>
                   <div>
-                    <h3 className="text-white font-semibold text-lg mb-2">Zero Business Disruption</h3>
-                    <p className="text-[#a0a0b0]">Flexible day and night scheduling fitted to your business hours — held reliably week after week.</p>
+                    <h3 className="text-white font-semibold text-lg mb-2">Zero Operational Disruption</h3>
+                    <p className="text-[#a0a0b0]">Flexible day and night scheduling fitted to your facility's operating hours — customized cleaning plans held reliably week after week.</p>
                   </div>
                 </div>
               </div>

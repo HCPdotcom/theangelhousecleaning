@@ -18,8 +18,8 @@ if not BASE_URL:
 
 API = f"{BASE_URL}/api"
 
-ADMIN_EMAIL = "admin@theangelhousecleaning.com"
-ADMIN_PASSWORD = "ChangeMeAngel2026!"
+ADMIN_EMAIL = "theangelhc@gmail.com"
+ADMIN_PASSWORD = "VaultRiver!CleanOps47"
 
 
 @pytest.fixture(scope="module")
@@ -253,7 +253,61 @@ class TestContactRegression:
         assert r.status_code == 201, r.text
         assert r.json().get("status") == "received"
 
-    def test_contact_list(self, session):
-        r = session.get(f"{API}/contact")
+    def test_contact_list(self, session, auth_headers):
+        # GET /api/contact now requires admin per server.py
+        r = session.get(f"{API}/contact", headers=auth_headers)
         assert r.status_code == 200
         assert isinstance(r.json(), list)
+
+    def test_contact_expanded_payload_educational(self, session):
+        r = session.post(f"{API}/contact", json={
+            "name": "TEST_Edu Contact",
+            "email": "test_edu@example.com",
+            "phone": "9725550111",
+            "serviceType": "commercial",
+            "businessName": "TEST Acme Schools",
+            "propertyType": "educational",
+            "squareFootage": "10000-25000",
+            "frequency": "weekly",
+            "message": "We need quarterly deep clean.",
+        })
+        assert r.status_code == 201, r.text
+        assert r.json().get("status") == "received"
+
+    def test_contact_expanded_payload_government(self, session):
+        r = session.post(f"{API}/contact", json={
+            "name": "TEST_Gov Contact",
+            "email": "test_gov@example.com",
+            "phone": "9725550222",
+            "serviceType": "commercial",
+            "businessName": "TEST Gov Office",
+            "propertyType": "government",
+            "squareFootage": "5000-10000",
+            "frequency": "biweekly",
+            "message": "Looking for vendor.",
+        })
+        assert r.status_code == 201, r.text
+
+    def test_admin_contacts_endpoint(self, session, auth_headers):
+        r = session.get(f"{API}/admin/contacts", headers=auth_headers)
+        assert r.status_code == 200
+        items = r.json()
+        assert isinstance(items, list)
+        # Should include our test contacts
+        assert any("TEST_" in (c.get("name") or "") for c in items)
+
+    def test_admin_contacts_requires_auth(self, session):
+        r = session.get(f"{API}/admin/contacts")
+        assert r.status_code == 401
+
+
+# --------------------------- Capability Statement static file ---------------------------
+
+class TestCapabilityStatement:
+    def test_capability_statement_downloadable(self):
+        # Static asset served by frontend, not via /api
+        url = f"{BASE_URL}/capability-statement.txt"
+        r = requests.get(url, timeout=10)
+        assert r.status_code == 200, f"Expected 200 from {url}, got {r.status_code}"
+        # Should be non-empty text
+        assert len(r.text.strip()) > 50, "Capability statement appears empty"

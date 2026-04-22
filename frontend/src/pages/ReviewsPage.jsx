@@ -103,7 +103,7 @@ const ReviewsPage = () => {
       ? 'How did we do in your home?'
       : initialType === 'commercial'
         ? 'How has our team supported your facility?'
-        : "Your feedback helps us hold our team to a higher standard — and helps other DFW businesses and homeowners choose with confidence.";
+        : "Your feedback helps us hold our team to a higher standard — and helps other Dallas and North Dallas businesses and homeowners choose with confidence.";
 
   useEffect(() => {
     let mounted = true;
@@ -169,7 +169,13 @@ const ReviewsPage = () => {
           <div className="max-w-3xl mx-auto text-center">
             <div className="inline-flex items-center gap-2 bg-[#66CC33]/20 border border-[#66CC33]/30 rounded-full px-4 py-2 mb-6">
               <MessageSquare size={16} className="text-[#66CC33]" />
-              <span className="text-[#66CC33] text-sm font-medium">Client Feedback</span>
+              <span className="text-[#66CC33] text-sm font-medium" data-testid="reviews-type-label">
+                {initialType === 'residential'
+                  ? 'Residential Feedback'
+                  : initialType === 'commercial'
+                    ? 'Commercial Feedback'
+                    : 'Client Feedback'}
+              </span>
             </div>
             <h1 className="font-display text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight mb-6">
               Share Your <span className="text-[#66CC33]">Experience</span>

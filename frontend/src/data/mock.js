@@ -11,7 +11,7 @@ export const companyInfo = {
     state: "TX",
     zip: "75024"
   },
-  serviceArea: "Dallas-Fort Worth (DFW) Metroplex",
+  serviceArea: "Dallas, North Dallas, and Surrounding Communities",
   foundedYear: 2005,
   logo: "https://images.squarespace-cdn.com/content/v1/5ae1ef7b3917ee6f16b209c8/140349ca-b816-4e8e-a3b1-7e4751fac9ef/The_Angel_House_Cleaning_Final.jpg"
 };
@@ -115,7 +115,7 @@ export const whyChooseUs = [
   {
     id: 4,
     title: "Since 2005",
-    description: "Nearly two decades of trusted service in the DFW metroplex with a proven track record.",
+    description: "Nearly two decades of trusted service across Dallas and North Dallas with a proven track record.",
     icon: "Award"
   }
 ];
