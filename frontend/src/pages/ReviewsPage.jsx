@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import {
   Star,
@@ -77,11 +77,32 @@ const StarRow = ({ rating }) => (
 );
 
 const ReviewsPage = () => {
+  const location = useLocation();
   const [formData, setFormData] = useState(emptyForm);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submission, setSubmission] = useState(null); // { routing, message, rating }
   const [publicReviews, setPublicReviews] = useState([]);
   const [loadingReviews, setLoadingReviews] = useState(true);
+
+  // Read ?type= once on mount / when URL changes to pre-select service type
+  // and swap the dynamic intro copy. Links used by the CTAs:
+  //   /feedback?type=residential
+  //   /feedback?type=commercial
+  const typeParam = (new URLSearchParams(location.search).get('type') || '').toLowerCase();
+  const initialType = typeParam === 'residential' || typeParam === 'commercial' ? typeParam : null;
+
+  useEffect(() => {
+    if (initialType) {
+      setFormData((prev) => ({ ...prev, serviceType: initialType }));
+    }
+  }, [initialType]);
+
+  const dynamicIntro =
+    initialType === 'residential'
+      ? 'How did we do in your home?'
+      : initialType === 'commercial'
+        ? 'How has our team supported your facility?'
+        : "Your feedback helps us hold our team to a higher standard — and helps other DFW businesses and homeowners choose with confidence.";
 
   useEffect(() => {
     let mounted = true;
@@ -152,8 +173,8 @@ const ReviewsPage = () => {
             <h1 className="font-display text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight mb-6">
               Share Your <span className="text-[#66CC33]">Experience</span>
             </h1>
-            <p className="text-xl text-white/80 leading-relaxed">
-              Your feedback helps us hold our team to a higher standard — and helps other DFW businesses and homeowners choose with confidence.
+            <p className="text-xl text-white/80 leading-relaxed" data-testid="reviews-intro-copy">
+              {dynamicIntro}
             </p>
           </div>
         </div>

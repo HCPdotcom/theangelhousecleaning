@@ -50,6 +50,8 @@ function App() {
             <Route path="/residential" element={<ResidentialPage />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/contact" element={<ContactPage />} />
+            <Route path="/feedback" element={<ReviewsPage />} />
+            <Route path="/client-feedback" element={<ReviewsPage />} />
             <Route path="/reviews" element={<ReviewsPage />} />
             <Route path="/admin/login" element={<AdminLoginPage />} />
             <Route path="/admin/reviews" element={<AdminReviewsPage />} />

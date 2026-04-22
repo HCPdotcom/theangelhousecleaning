@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { 
   Phone, 
@@ -11,7 +11,8 @@ import {
   Home,
   CheckCircle,
   Handshake,
-  ArrowRight
+  ArrowRight,
+  Star
 } from 'lucide-react';
 import { companyInfo } from '../data/mock';
 import { toast } from 'sonner';
@@ -433,6 +434,37 @@ const ContactPage = () => {
                   </p>
                 </form>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Share Your Experience CTA — for existing clients */}
+      <section className="py-16 bg-[#12122a] border-t border-[#66CC33]/10" data-testid="contact-feedback-cta">
+        <div className="max-w-5xl mx-auto px-6 lg:px-8">
+          <div className="card-dark p-8 md:p-10 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="flex items-start gap-4">
+              <div className="w-12 h-12 rounded-xl bg-[#66CC33]/15 flex items-center justify-center flex-shrink-0">
+                <Star className="text-[#66CC33] fill-[#66CC33]" size={24} />
+              </div>
+              <div>
+                <h3 className="text-white font-display text-2xl font-bold mb-2">Already a client?</h3>
+                <p className="text-[#a0a0b0] leading-relaxed">
+                  We'd love to hear how we're doing. Your feedback helps us serve you better.
+                </p>
+              </div>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <Link to="/feedback?type=commercial" className="btn-secondary text-sm py-3 px-5" data-testid="contact-feedback-commercial-btn">
+                <Building2 size={16} /> Commercial Feedback
+              </Link>
+              <Link to="/feedback?type=residential" className="btn-secondary text-sm py-3 px-5" data-testid="contact-feedback-residential-btn">
+                <Home size={16} /> Residential Feedback
+              </Link>
+              <Link to="/feedback" className="btn-primary text-sm py-3 px-5" data-testid="contact-share-experience-btn">
+                Share Your Experience
+                <ArrowRight size={16} />
+              </Link>
             </div>
           </div>
         </div>

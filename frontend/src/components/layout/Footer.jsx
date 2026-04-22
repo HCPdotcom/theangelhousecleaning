@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Phone, Mail, MapPin, Clock, ArrowRight, Handshake } from 'lucide-react';
+import { Phone, Mail, MapPin, Clock, ArrowRight, Handshake, Star } from 'lucide-react';
 import { companyInfo, navLinks } from '../../data/mock';
 
 const Footer = () => {
@@ -169,9 +169,20 @@ const Footer = () => {
             <p className="text-[#a0a0b0] text-sm text-center md:text-left">
               © {currentYear} {companyInfo.name}. All rights reserved.
             </p>
-            <p className="text-[#a0a0b0] text-sm">
-              Fully Licensed & Insured | Serving DFW Since {companyInfo.foundedYear}
-            </p>
+            <div className="flex items-center gap-4">
+              <Link
+                to="/feedback"
+                className="inline-flex items-center gap-2 text-[#66CC33] text-sm font-semibold hover:gap-3 transition-all"
+                data-testid="footer-leave-review-link"
+              >
+                <Star size={16} className="fill-[#66CC33]" />
+                Leave a Review
+              </Link>
+              <span className="text-[#a0a0b0]/40 hidden md:inline">·</span>
+              <p className="text-[#a0a0b0] text-sm">
+                Fully Licensed &amp; Insured | Serving DFW Since {companyInfo.foundedYear}
+              </p>
+            </div>
           </div>
         </div>
       </div>
