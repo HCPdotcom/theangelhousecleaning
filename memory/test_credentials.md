@@ -5,7 +5,7 @@
 | Field | Value |
 |---|---|
 | Login URL | `/admin/login` |
-| Email | `admin@theangelhousecleaning.com` |
+| Email | `theangelhc@gmail.com` |
 | Password | `VaultRiver!CleanOps47` |
 
 These are defined in `/app/backend/.env` (`ADMIN_EMAIL`, `ADMIN_PASSWORD`, `ADMIN_JWT_SECRET`).
