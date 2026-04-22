@@ -56,7 +56,7 @@ const CommercialPage = () => {
             </h1>
 
             <p className="text-xl text-white/80 mb-8 leading-relaxed max-w-2xl">
-              Your DFW commercial cleaning partner for office, medical, retail, educational, and government facilities. Insured, trained, and accountable — with written scopes, consistent crews, and scalable service agreements.
+              Providing commercial cleaning services for businesses and facilities across the Dallas–North Dallas region. Insured, trained, and accountable — with written scopes, consistent crews, and scalable service agreements.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4">

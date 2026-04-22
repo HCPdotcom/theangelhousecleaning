@@ -53,7 +53,7 @@ const processSteps = [
 const serviceCities = [
   'Celina', 'Prosper', 'Frisco', 'McKinney', 'Plano', 'Allen',
   'Richardson', 'Carrollton', 'Dallas', 'Fort Worth'
-];
+]; // Kept for reference — no longer rendered; Home uses general copy per positioning update.
 
 const HomePage = () => {
   return (
@@ -69,15 +69,15 @@ const HomePage = () => {
           <div className="max-w-3xl">
             <div className="inline-flex items-center gap-2 bg-[#66CC33]/20 border border-[#66CC33]/30 rounded-full px-4 py-2 mb-6">
               <Sparkles size={16} className="text-[#66CC33]" />
-              <span className="text-[#66CC33] text-sm font-medium">Your DFW Commercial Cleaning Partner · Since 2005</span>
+              <span className="text-[#66CC33] text-sm font-medium">Professional Cleaning Since 2005</span>
             </div>
 
             <h1 className="font-display text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight mb-6">
-              Facility Services <span className="text-[#66CC33]">Built on Reliability</span>
+              Your DFW Commercial <span className="text-[#66CC33]">&amp; Residential Cleaning Partner</span> Since 2005
             </h1>
 
             <p className="text-xl text-white/80 mb-8 leading-relaxed max-w-2xl">
-              Insured, trained, and accountable commercial cleaning for offices, medical, retail, educational, and government facilities across the DFW metroplex. Written scopes. Consistent crews. Scalable service.
+              Insured, trained, and accountable cleaning for businesses, facilities, and homes across Dallas, North Dallas, and surrounding communities. Written scopes. Consistent crews. Scalable service.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4">
@@ -336,22 +336,11 @@ const HomePage = () => {
             <span className="text-[#66CC33] text-xs font-semibold uppercase tracking-wider">Service Area</span>
           </div>
           <h2 className="font-display text-3xl md:text-4xl font-bold text-white mb-4">
-            Serving the DFW Metroplex &amp; North Dallas
+            Serving Dallas, North Dallas &amp; Surrounding Communities
           </h2>
           <p className="text-[#a0a0b0] max-w-2xl mx-auto">
-            Headquartered in Plano, with dedicated coverage across North Dallas including Celina, Prosper, Frisco, and McKinney.
+            Serving Dallas, North Dallas, and surrounding communities — contact us to confirm coverage for your location.
           </p>
-          <div className="mt-8 flex flex-wrap justify-center gap-3">
-            {serviceCities.map((city) => (
-              <span
-                key={city}
-                className="bg-[#191970] text-white px-4 py-2 rounded-full text-sm border border-[#66CC33]/20"
-                data-testid={`service-city-${city.toLowerCase()}`}
-              >
-                {city}
-              </span>
-            ))}
-          </div>
         </div>
       </section>
 
