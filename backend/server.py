@@ -1,7 +1,8 @@
-from fastapi import FastAPI, APIRouter, HTTPException
+from fastapi import FastAPI, APIRouter, HTTPException, Depends, Request
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
+from pymongo import ReturnDocument
 import os
 import logging
 from pathlib import Path
@@ -10,7 +11,8 @@ from typing import List, Optional
 import uuid
 from datetime import datetime, timezone
 
-from services.email_service import send_contact_notification
+from services.email_service import send_contact_notification, send_review_notification
+from auth import verify_admin_credentials, create_admin_token, require_admin
 
 
 ROOT_DIR = Path(__file__).parent
@@ -174,6 +176,210 @@ async def list_contacts(limit: int = 100):
         if isinstance(item.get("createdAt"), str):
             item["createdAt"] = datetime.fromisoformat(item["createdAt"])
     return items
+
+
+# ---------------------------------------------------------------------------
+# Reviews — public submission + admin moderation
+# ---------------------------------------------------------------------------
+
+ALLOWED_STATUSES = {"pending", "approved", "rejected"}
+
+
+class ReviewCreate(BaseModel):
+    firstName: str = Field(min_length=1, max_length=60)
+    lastInitialOrCompany: str = Field(min_length=1, max_length=80)
+    phone: str = Field(min_length=5, max_length=40)
+    email: EmailStr
+    serviceType: str = Field(pattern="^(commercial|residential)$")
+    rating: int = Field(ge=1, le=5)
+    text: str = Field(min_length=10, max_length=2000)
+    consentPublish: bool = False
+    consentContact: bool = False
+
+
+class ReviewPublic(BaseModel):
+    """Privacy-stripped review for the public testimonials grid."""
+    id: str
+    firstName: str
+    lastInitialOrCompany: str
+    serviceType: str
+    rating: int
+    text: str
+    createdAt: datetime
+
+
+class ReviewAdmin(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+
+    id: str
+    firstName: str
+    lastInitialOrCompany: str
+    phone: str
+    email: EmailStr
+    serviceType: str
+    rating: int
+    text: str
+    consentPublish: bool
+    consentContact: bool
+    status: str
+    followUp: bool
+    emailSent: bool = False
+    createdAt: datetime
+    reviewedAt: Optional[datetime] = None
+
+
+class ReviewModerate(BaseModel):
+    status: Optional[str] = None  # approved | rejected | pending
+    followUp: Optional[bool] = None
+
+
+class ReviewSubmitResponse(BaseModel):
+    id: str
+    rating: int
+    routing: str  # "promote" | "followup"
+    message: str
+
+
+@api_router.post("/reviews", response_model=ReviewSubmitResponse, status_code=201)
+async def create_review(payload: ReviewCreate):
+    now = datetime.now(timezone.utc)
+    needs_follow_up = payload.rating <= 3
+    doc = {
+        "id": str(uuid.uuid4()),
+        "firstName": payload.firstName.strip(),
+        "lastInitialOrCompany": payload.lastInitialOrCompany.strip(),
+        "phone": payload.phone.strip(),
+        "email": payload.email.lower().strip(),
+        "serviceType": payload.serviceType,
+        "rating": payload.rating,
+        "text": payload.text.strip(),
+        "consentPublish": payload.consentPublish,
+        "consentContact": payload.consentContact,
+        "status": "pending",
+        "followUp": needs_follow_up,
+        "emailSent": False,
+        "createdAt": now.isoformat(),
+        "reviewedAt": None,
+    }
+
+    try:
+        await db.reviews.insert_one(doc)
+    except Exception as exc:
+        logger.exception("Failed to persist review: %s", exc)
+        raise HTTPException(status_code=500, detail="We couldn't save your review. Please try again.")
+
+    email_ok = await send_review_notification(doc)
+    if email_ok:
+        try:
+            await db.reviews.update_one({"id": doc["id"]}, {"$set": {"emailSent": True}})
+        except Exception as exc:  # noqa: BLE001
+            logger.warning("Could not flag emailSent for review %s: %s", doc["id"], exc)
+
+    logger.info(
+        "New review %s rating=%s status=pending followUp=%s", doc["id"], doc["rating"], doc["followUp"]
+    )
+
+    if payload.rating >= 4 and payload.consentPublish:
+        routing = "promote"
+        message = "Thank you for your kind words! Would you share them on Google too?"
+    elif payload.rating >= 4:
+        routing = "thanks"
+        message = "Thank you for sharing your experience with us."
+    else:
+        routing = "followup"
+        message = "Thank you for the honest feedback. A team member will reach out personally."
+
+    return ReviewSubmitResponse(id=doc["id"], rating=payload.rating, routing=routing, message=message)
+
+
+@api_router.get("/reviews/public", response_model=List[ReviewPublic])
+async def list_public_reviews(limit: int = 30):
+    """Approved, publish-consented reviews only. No phone/email exposed."""
+    cursor = db.reviews.find(
+        {"status": "approved", "consentPublish": True},
+        {"_id": 0, "phone": 0, "email": 0, "consentContact": 0, "followUp": 0, "emailSent": 0, "reviewedAt": 0},
+    ).sort("createdAt", -1)
+    items = await cursor.to_list(limit)
+    for item in items:
+        if isinstance(item.get("createdAt"), str):
+            item["createdAt"] = datetime.fromisoformat(item["createdAt"])
+    return items
+
+
+# ---------- Admin: login + moderation ----------
+
+
+class AdminLogin(BaseModel):
+    email: EmailStr
+    password: str
+
+
+class AdminLoginResponse(BaseModel):
+    token: str
+    email: EmailStr
+    expiresInHours: int = 12
+
+
+@api_router.post("/admin/login", response_model=AdminLoginResponse)
+async def admin_login(payload: AdminLogin, request: Request):
+    verify_admin_credentials(payload.email, payload.password, request)
+    token = create_admin_token(payload.email.lower().strip())
+    return AdminLoginResponse(token=token, email=payload.email.lower().strip())
+
+
+@api_router.get("/admin/me")
+async def admin_me(current=Depends(require_admin)):
+    return current
+
+
+@api_router.get("/admin/reviews", response_model=List[ReviewAdmin])
+async def list_all_reviews(
+    status: Optional[str] = None,
+    limit: int = 200,
+    current=Depends(require_admin),
+):
+    query = {}
+    if status and status in ALLOWED_STATUSES:
+        query["status"] = status
+    cursor = db.reviews.find(query, {"_id": 0}).sort("createdAt", -1)
+    items = await cursor.to_list(limit)
+    for item in items:
+        for key in ("createdAt", "reviewedAt"):
+            if isinstance(item.get(key), str):
+                item[key] = datetime.fromisoformat(item[key])
+    return items
+
+
+@api_router.patch("/admin/reviews/{review_id}", response_model=ReviewAdmin)
+async def moderate_review(
+    review_id: str,
+    payload: ReviewModerate,
+    current=Depends(require_admin),
+):
+    update: dict = {}
+    if payload.status is not None:
+        if payload.status not in ALLOWED_STATUSES:
+            raise HTTPException(status_code=422, detail=f"Invalid status. Allowed: {sorted(ALLOWED_STATUSES)}")
+        update["status"] = payload.status
+        update["reviewedAt"] = datetime.now(timezone.utc).isoformat()
+    if payload.followUp is not None:
+        update["followUp"] = bool(payload.followUp)
+    if not update:
+        raise HTTPException(status_code=422, detail="Nothing to update.")
+
+    result = await db.reviews.find_one_and_update(
+        {"id": review_id},
+        {"$set": update},
+        projection={"_id": 0},
+        return_document=ReturnDocument.AFTER,
+    )
+    if not result:
+        raise HTTPException(status_code=404, detail="Review not found.")
+    for key in ("createdAt", "reviewedAt"):
+        if isinstance(result.get(key), str):
+            result[key] = datetime.fromisoformat(result[key])
+    logger.info("Review %s moderated by %s: %s", review_id, current["email"], update)
+    return result
 
 
 # Include the router in the main app

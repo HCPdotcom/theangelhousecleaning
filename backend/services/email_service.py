@@ -120,3 +120,91 @@ async def send_contact_notification(submission: Mapping[str, Any]) -> bool:
     except Exception as exc:  # noqa: BLE001
         logger.exception("Resend email failed for submission %s: %s", submission.get("id"), exc)
         return False
+
+
+def _build_review_html(review: Mapping[str, Any]) -> str:
+    rating = int(review.get("rating") or 0)
+    stars = "★" * rating + "☆" * (5 - rating)
+    low = rating <= 3
+    banner_color = "#b91c1c" if low else "#191970"
+    banner_text = "Low-rating review — follow-up flagged" if low else f"New {rating}-star review"
+    rows = [
+        ("Rating", f"{stars}  ({rating}/5)"),
+        ("Name", f"{review.get('firstName', '')} {review.get('lastInitialOrCompany', '')}"),
+        ("Email", review.get("email", "")),
+        ("Phone", review.get("phone", "")),
+        ("Service Type", review.get("serviceType", "")),
+        ("Publish Consent", "Yes" if review.get("consentPublish") else "No"),
+        ("Contact Consent", "Yes" if review.get("consentContact") else "No"),
+        ("Follow-Up Flag", "Yes" if review.get("followUp") else "No"),
+        ("Submitted At", review.get("createdAt", "")),
+    ]
+    row_html = "".join(
+        f"""<tr>
+              <td style="padding:8px 12px;border-bottom:1px solid #eee;color:#191970;font-weight:600;width:170px;">{escape(str(k))}</td>
+              <td style="padding:8px 12px;border-bottom:1px solid #eee;color:#222;">{escape(str(v))}</td>
+            </tr>"""
+        for k, v in rows
+    )
+    body_text = escape(str(review.get("text") or "")).replace("\n", "<br/>")
+    return f"""<!doctype html>
+<html><body style="margin:0;padding:0;background:#f4f6fb;font-family:Arial,Helvetica,sans-serif;">
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#f4f6fb;padding:24px 0;">
+    <tr><td align="center">
+      <table role="presentation" width="600" cellspacing="0" cellpadding="0" style="background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(25,25,112,0.08);">
+        <tr><td style="background:{banner_color};padding:20px 28px;">
+          <div style="color:#66CC33;font-size:13px;letter-spacing:2px;text-transform:uppercase;">The Angel House Cleaning</div>
+          <div style="color:#ffffff;font-size:22px;font-weight:700;margin-top:4px;">{escape(banner_text)}</div>
+        </td></tr>
+        <tr><td style="padding:24px 28px;">
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse;font-size:14px;">
+            {row_html}
+          </table>
+          <div style="margin-top:20px;padding:14px 16px;background:#f7faf3;border-left:4px solid #66CC33;border-radius:6px;color:#222;font-size:14px;line-height:1.5;">
+            <div style="font-weight:600;color:#191970;margin-bottom:6px;">Review</div>
+            {body_text}
+          </div>
+        </td></tr>
+        <tr><td style="padding:16px 28px 24px;color:#8a8aa0;font-size:12px;">
+          Moderate this review in the admin dashboard.
+        </td></tr>
+      </table>
+    </td></tr>
+  </table>
+</body></html>"""
+
+
+async def send_review_notification(review: Mapping[str, Any]) -> bool:
+    """Send a review-notification email. Returns True on success, False otherwise.
+
+    Disabled while RESEND_API_KEY is empty; never raises.
+    """
+    to_addr = (os.environ.get("CONTACT_NOTIFICATION_EMAIL") or DEFAULT_NOTIFICATION_EMAIL).strip()
+
+    if not _is_enabled():
+        logger.info(
+            "Resend disabled (no RESEND_API_KEY); review %s saved — notification queued for %s once key is added",
+            review.get("id"), to_addr,
+        )
+        return False
+
+    resend.api_key = os.environ["RESEND_API_KEY"].strip()
+    sender = (os.environ.get("SENDER_EMAIL") or "onboarding@resend.dev").strip()
+    rating = int(review.get("rating") or 0)
+    prefix = "Follow-Up Review" if rating <= 3 else "New Review"
+
+    params = {
+        "from": sender,
+        "to": [to_addr],
+        "reply_to": review.get("email") or sender,
+        "subject": f"[{prefix} — {rating}/5] {review.get('firstName', 'Website review')}",
+        "html": _build_review_html(review),
+    }
+
+    try:
+        result = await asyncio.to_thread(resend.Emails.send, params)
+        logger.info("Resend review email sent for %s (id=%s)", review.get("id"), (result or {}).get("id"))
+        return True
+    except Exception as exc:  # noqa: BLE001
+        logger.exception("Resend review email failed for %s: %s", review.get("id"), exc)
+        return False

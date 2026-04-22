@@ -152,5 +152,6 @@ export const navLinks = [
   { name: "Commercial", path: "/commercial" },
   { name: "Residential", path: "/residential" },
   { name: "About", path: "/about" },
+  { name: "Client Feedback", path: "/reviews" },
   { name: "Contact", path: "/contact" }
 ];
