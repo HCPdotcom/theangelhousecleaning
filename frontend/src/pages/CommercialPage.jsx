@@ -13,7 +13,11 @@ import {
   Phone,
   Star,
   Users,
-  CalendarCheck
+  CalendarCheck,
+  GraduationCap,
+  Landmark,
+  Store,
+  Download
 } from 'lucide-react';
 import { companyInfo, commercialServices, images } from '../data/mock';
 
@@ -52,7 +56,7 @@ const CommercialPage = () => {
             </h1>
 
             <p className="text-xl text-white/80 mb-8 leading-relaxed max-w-2xl">
-              Insured, consistent commercial cleaning for DFW offices, medical, retail, and professional buildings. Written scopes, dedicated teams, and service agreements that hold up month after month.
+              Your DFW commercial cleaning partner for office, medical, retail, educational, and government facilities. Insured, trained, and accountable — with written scopes, consistent crews, and scalable service agreements.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4">
@@ -60,9 +64,15 @@ const CommercialPage = () => {
                 Schedule a Walk-Through
                 <ArrowRight size={20} />
               </Link>
-              <Link to="/contact" className="btn-secondary text-lg py-4 px-8" data-testid="commercial-hero-quote-btn">
-                Request a Quote
-              </Link>
+              <a
+                href="/capability-statement.txt"
+                download
+                className="btn-secondary text-lg py-4 px-8"
+                data-testid="commercial-download-capability-btn"
+              >
+                <Download size={20} />
+                Capability Statement
+              </a>
             </div>
           </div>
         </div>
@@ -199,11 +209,11 @@ const CommercialPage = () => {
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-6">
             {[
-              { name: 'Corporate Offices', icon: Building2, desc: 'From small offices to large corporate spaces' },
-              { name: 'Medical Offices', icon: Stethoscope, desc: 'Healthcare-compliant cleaning standards' },
-              { name: 'Retail Spaces', icon: Sparkles, desc: 'Inviting spaces for customers' },
-              { name: 'Small Warehouses', icon: Building2, desc: 'Light-industrial and flex space' },
-              { name: 'Professional Buildings', icon: Users, desc: 'Law, finance, and consulting firms' }
+              { name: 'Offices', icon: Building2, desc: 'Corporate, professional, and small-to-mid buildings' },
+              { name: 'Medical & Dental', icon: Stethoscope, desc: 'Healthcare-compliant cleaning standards' },
+              { name: 'Retail', icon: Store, desc: 'Storefronts that stay showroom-ready' },
+              { name: 'Educational', icon: GraduationCap, desc: 'Schools, training centers, and learning facilities' },
+              { name: 'Government / Municipal', icon: Landmark, desc: 'Public-sector facilities and agencies' }
             ].map((industry, index) => (
               <div key={index} className="card-dark p-8 text-center group">
                 <div className="w-16 h-16 rounded-full bg-[#191970] flex items-center justify-center mx-auto mb-6 group-hover:bg-[#66CC33] transition-colors">

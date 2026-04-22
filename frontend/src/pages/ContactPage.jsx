@@ -325,8 +325,10 @@ const ContactPage = () => {
                           {formData.serviceType === 'commercial' ? (
                             <>
                               <option value="office">Office Building</option>
-                              <option value="medical">Medical Office</option>
+                              <option value="medical">Medical / Dental Office</option>
                               <option value="retail">Retail Space</option>
+                              <option value="educational">Educational Facility</option>
+                              <option value="government">Government / Municipal</option>
                               <option value="warehouse">Small Warehouse</option>
                               <option value="professional">Professional Building</option>
                               <option value="other">Other Commercial</option>
@@ -436,18 +438,19 @@ const ContactPage = () => {
         </div>
       </section>
 
-      {/* Map or Service Area Section */}
-      <section className="py-16 bg-[#0a0a1a]">
+      {/* Service Area */}
+      <section className="py-16 bg-[#0a0a1a]" data-testid="contact-service-area">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 text-center">
-          <h2 className="font-display text-3xl font-bold text-white mb-4">Serving the DFW Metroplex</h2>
+          <h2 className="font-display text-3xl font-bold text-white mb-4">Serving the DFW Metroplex &amp; North Dallas</h2>
           <p className="text-[#a0a0b0] max-w-2xl mx-auto">
-            We proudly serve businesses and homes throughout the Dallas-Fort Worth area. Contact us to see if we service your location.
+            Headquartered in Plano with dedicated North Dallas coverage across Celina, Prosper, Frisco, and McKinney. Contact us to confirm service for your location.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-4">
-            {['Dallas', 'Fort Worth', 'Frisco', 'Plano', 'McKinney', 'Allen', 'Richardson', 'Carrollton'].map((city) => (
+            {['Celina', 'Prosper', 'Frisco', 'McKinney', 'Plano', 'Allen', 'Richardson', 'Carrollton', 'Dallas', 'Fort Worth'].map((city) => (
               <span
                 key={city}
-                className="bg-[#191970] text-white px-4 py-2 rounded-full text-sm"
+                className="bg-[#191970] text-white px-4 py-2 rounded-full text-sm border border-[#66CC33]/20"
+                data-testid={`contact-city-${city.toLowerCase()}`}
               >
                 {city}
               </span>
