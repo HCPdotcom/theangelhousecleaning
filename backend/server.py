@@ -10,6 +10,8 @@ from typing import List, Optional
 import uuid
 from datetime import datetime, timezone
 
+from services.email_service import send_contact_notification
+
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -137,9 +139,14 @@ async def create_contact(payload: ContactCreate):
             detail="We couldn't save your request. Please try again or call us directly.",
         )
 
-    # TODO: When RESEND_API_KEY is available, send an email notification to
-    # CONTACT_NOTIFICATION_EMAIL (default: theangelhc@gmail.com) and then
-    # update this document with emailSent=True.
+    # Best-effort email notification. Disabled automatically when RESEND_API_KEY
+    # is empty; never blocks the user-facing response.
+    email_ok = await send_contact_notification(doc)
+    if email_ok:
+        try:
+            await db.contacts.update_one({"id": doc["id"]}, {"$set": {"emailSent": True}})
+        except Exception as exc:  # noqa: BLE001
+            logger.warning("Could not flag emailSent for %s: %s", doc["id"], exc)
 
     logger.info(
         "New contact submission %s (%s, partner=%s)",
