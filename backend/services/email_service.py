@@ -92,13 +92,17 @@ async def send_contact_notification(submission: Mapping[str, Any]) -> bool:
 
     Never raises — callers treat the email step as best-effort.
     """
+    to_addr = (os.environ.get("CONTACT_NOTIFICATION_EMAIL") or DEFAULT_NOTIFICATION_EMAIL).strip()
+
     if not _is_enabled():
-        logger.info("Resend disabled (no RESEND_API_KEY set); skipping email for %s", submission.get("id"))
+        logger.info(
+            "Resend disabled (no RESEND_API_KEY); lead %s saved — notification queued for %s once key is added",
+            submission.get("id"), to_addr,
+        )
         return False
 
     resend.api_key = os.environ["RESEND_API_KEY"].strip()
     sender = (os.environ.get("SENDER_EMAIL") or "onboarding@resend.dev").strip()
-    to_addr = (os.environ.get("CONTACT_NOTIFICATION_EMAIL") or DEFAULT_NOTIFICATION_EMAIL).strip()
 
     subject_prefix = "Partner Inquiry" if submission.get("isPartnerInquiry") else "New Quote Request"
     params = {
