@@ -170,7 +170,16 @@ async def create_contact(payload: ContactCreate):
 
 
 @api_router.get("/contact", response_model=List[Contact])
-async def list_contacts(limit: int = 100):
+async def list_contacts(limit: int = 100, current=Depends(require_admin)):
+    items = await db.contacts.find({}, {"_id": 0}).sort("createdAt", -1).to_list(limit)
+    for item in items:
+        if isinstance(item.get("createdAt"), str):
+            item["createdAt"] = datetime.fromisoformat(item["createdAt"])
+    return items
+
+
+@api_router.get("/admin/contacts", response_model=List[Contact])
+async def list_admin_contacts(limit: int = 500, current=Depends(require_admin)):
     items = await db.contacts.find({}, {"_id": 0}).sort("createdAt", -1).to_list(limit)
     for item in items:
         if isinstance(item.get("createdAt"), str):

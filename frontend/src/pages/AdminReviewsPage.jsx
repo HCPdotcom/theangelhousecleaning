@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Star, CheckCircle2, XCircle, Flag, LogOut, Filter, Loader2, RefreshCw } from 'lucide-react';
+import { Star, CheckCircle2, XCircle, Flag, LogOut, Filter, Loader2, RefreshCw, MessageSquare, ClipboardList } from 'lucide-react';
 import { toast } from 'sonner';
 import { ADMIN_TOKEN_KEY } from './AdminLoginPage';
 
@@ -99,7 +99,7 @@ const AdminReviewsPage = () => {
     <div className="min-h-screen bg-[#0a0a1a] py-24 px-6" data-testid="admin-reviews-page">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
+        <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
           <div>
             <h1 className="font-display text-3xl md:text-4xl font-bold text-white">Review Moderation</h1>
             <p className="text-[#a0a0b0] text-sm mt-1">Approve, reject, or flag for follow-up.</p>
@@ -112,6 +112,16 @@ const AdminReviewsPage = () => {
               <LogOut size={16} /> Sign out
             </button>
           </div>
+        </div>
+
+        {/* Admin cross-nav */}
+        <div className="flex items-center gap-2 mb-6" data-testid="admin-nav">
+          <Link to="/admin/contacts" className="px-4 py-1.5 rounded-full text-sm font-medium text-white bg-[#191970] border border-[#66CC33]/20 hover:border-[#66CC33]/60 transition-colors">
+            <ClipboardList size={14} className="inline mr-1.5" /> Contacts
+          </Link>
+          <Link to="/admin/reviews" className="px-4 py-1.5 rounded-full text-sm font-semibold bg-[#66CC33] text-[#0a0a1a]">
+            <MessageSquare size={14} className="inline mr-1.5" /> Reviews
+          </Link>
         </div>
 
         {/* Filter pills */}

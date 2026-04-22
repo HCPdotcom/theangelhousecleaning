@@ -15,6 +15,7 @@ import ContactPage from "./pages/ContactPage";
 import ReviewsPage from "./pages/ReviewsPage";
 import AdminLoginPage from "./pages/AdminLoginPage";
 import AdminReviewsPage from "./pages/AdminReviewsPage";
+import AdminContactsPage from "./pages/AdminContactsPage";
 
 // Scroll to top on route change
 const ScrollToTop = () => {
@@ -55,6 +56,7 @@ function App() {
             <Route path="/reviews" element={<ReviewsPage />} />
             <Route path="/admin/login" element={<AdminLoginPage />} />
             <Route path="/admin/reviews" element={<AdminReviewsPage />} />
+            <Route path="/admin/contacts" element={<AdminContactsPage />} />
           </Routes>
         </Layout>
       </BrowserRouter>
