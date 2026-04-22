@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import axios from 'axios';
 import { 
   Phone, 
   Mail, 
@@ -15,20 +16,24 @@ import {
 import { companyInfo } from '../data/mock';
 import { toast } from 'sonner';
 
+const API_BASE = `${process.env.REACT_APP_BACKEND_URL}/api`;
+
+const emptyForm = {
+  name: '',
+  email: '',
+  phone: '',
+  serviceType: 'commercial',
+  propertyType: '',
+  frequency: '',
+  message: '',
+  isPartnerInquiry: false
+};
+
 const ContactPage = () => {
   const location = useLocation();
   const [isPartner, setIsPartner] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    serviceType: 'commercial',
-    propertyType: '',
-    frequency: '',
-    message: '',
-    isPartnerInquiry: false
-  });
+  const [formData, setFormData] = useState(emptyForm);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -48,23 +53,28 @@ const ContactPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isSubmitting) return;
     setIsSubmitting(true);
-    
-    // Simulate form submission (mock)
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    toast.success('Thank you! We will contact you shortly.');
-    setFormData({
-      name: '',
-      email: '',
-      phone: '',
-      serviceType: 'commercial',
-      propertyType: '',
-      frequency: '',
-      message: '',
-      isPartnerInquiry: false
-    });
-    setIsSubmitting(false);
+
+    try {
+      const { data } = await axios.post(`${API_BASE}/contact`, formData, {
+        headers: { 'Content-Type': 'application/json' },
+        timeout: 15000,
+      });
+
+      toast.success(data?.message || 'Thank you! We will contact you shortly.');
+      setFormData({ ...emptyForm, isPartnerInquiry: isPartner });
+    } catch (err) {
+      const detail = err?.response?.data?.detail;
+      const msg = Array.isArray(detail)
+        ? detail.map((d) => d.msg).join(', ')
+        : typeof detail === 'string'
+          ? detail
+          : 'Something went wrong sending your request. Please try again or call us directly.';
+      toast.error(msg);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -197,7 +207,7 @@ const ContactPage = () => {
                   }
                 </p>
 
-                <form onSubmit={handleSubmit} className="space-y-6">
+                <form onSubmit={handleSubmit} className="space-y-6" data-testid="contact-form">
                   <div className="grid md:grid-cols-2 gap-6">
                     <div>
                       <label className="block text-white font-medium mb-2">Your Name *</label>
@@ -209,6 +219,7 @@ const ContactPage = () => {
                         required
                         className="input-dark w-full"
                         placeholder="John Smith"
+                        data-testid="contact-name-input"
                       />
                     </div>
                     <div>
@@ -221,6 +232,7 @@ const ContactPage = () => {
                         required
                         className="input-dark w-full"
                         placeholder="john@example.com"
+                        data-testid="contact-email-input"
                       />
                     </div>
                   </div>
@@ -236,6 +248,7 @@ const ContactPage = () => {
                         required
                         className="input-dark w-full"
                         placeholder="(972) 555-1234"
+                        data-testid="contact-phone-input"
                       />
                     </div>
                     <div>
@@ -249,6 +262,7 @@ const ContactPage = () => {
                               ? 'bg-[#66CC33] border-[#66CC33] text-[#0a0a1a]'
                               : 'bg-transparent border-[#66CC33]/30 text-white hover:border-[#66CC33]'
                           }`}
+                          data-testid="contact-service-commercial-btn"
                         >
                           <Building2 size={18} />
                           Commercial
@@ -261,6 +275,7 @@ const ContactPage = () => {
                               ? 'bg-[#66CC33] border-[#66CC33] text-[#0a0a1a]'
                               : 'bg-transparent border-[#66CC33]/30 text-white hover:border-[#66CC33]'
                           }`}
+                          data-testid="contact-service-residential-btn"
                         >
                           <Home size={18} />
                           Residential
@@ -332,6 +347,7 @@ const ContactPage = () => {
                         ? "Tell us about your cleaning company, services, service area, and how you'd like to partner..."
                         : "Tell us more about your cleaning needs, special requirements, or any questions..."
                       }
+                      data-testid="contact-message-input"
                     />
                   </div>
 
@@ -339,6 +355,7 @@ const ContactPage = () => {
                     type="submit"
                     disabled={isSubmitting}
                     className="btn-primary w-full py-4 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                    data-testid="contact-submit-btn"
                   >
                     {isSubmitting ? (
                       <span className="flex items-center justify-center gap-2">

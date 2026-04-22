@@ -1,12 +1,12 @@
-from fastapi import FastAPI, APIRouter
+from fastapi import FastAPI, APIRouter, HTTPException
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 import os
 import logging
 from pathlib import Path
-from pydantic import BaseModel, Field, ConfigDict
-from typing import List
+from pydantic import BaseModel, EmailStr, Field, ConfigDict
+from typing import List, Optional
 import uuid
 from datetime import datetime, timezone
 
@@ -65,6 +65,103 @@ async def get_status_checks():
             check['timestamp'] = datetime.fromisoformat(check['timestamp'])
     
     return status_checks
+
+
+# ---------------------------------------------------------------------------
+# Contact / Quote Request
+# ---------------------------------------------------------------------------
+
+class ContactCreate(BaseModel):
+    name: str = Field(min_length=1, max_length=120)
+    email: EmailStr
+    phone: str = Field(min_length=5, max_length=40)
+    serviceType: str = Field(pattern="^(commercial|residential)$")
+    propertyType: Optional[str] = ""
+    frequency: Optional[str] = ""
+    message: Optional[str] = ""
+    isPartnerInquiry: bool = False
+
+
+class Contact(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+
+    id: str
+    name: str
+    email: EmailStr
+    phone: str
+    serviceType: str
+    propertyType: Optional[str] = ""
+    frequency: Optional[str] = ""
+    message: Optional[str] = ""
+    isPartnerInquiry: bool = False
+    emailSent: bool = False
+    createdAt: datetime
+
+
+class ContactResponse(BaseModel):
+    id: str
+    status: str
+    message: str
+
+
+@api_router.post("/contact", response_model=ContactResponse, status_code=201)
+async def create_contact(payload: ContactCreate):
+    # Partner inquiries must include a message describing their company.
+    if payload.isPartnerInquiry and not (payload.message or "").strip():
+        raise HTTPException(
+            status_code=422,
+            detail="Please tell us about your company in the message field.",
+        )
+
+    now = datetime.now(timezone.utc)
+    doc = {
+        "id": str(uuid.uuid4()),
+        "name": payload.name.strip(),
+        "email": payload.email.lower().strip(),
+        "phone": payload.phone.strip(),
+        "serviceType": payload.serviceType,
+        "propertyType": (payload.propertyType or "").strip(),
+        "frequency": (payload.frequency or "").strip(),
+        "message": (payload.message or "").strip(),
+        "isPartnerInquiry": payload.isPartnerInquiry,
+        "emailSent": False,  # Flip to True once Resend integration is added.
+        "createdAt": now.isoformat(),
+    }
+
+    try:
+        await db.contacts.insert_one(doc)
+    except Exception as exc:
+        logger.exception("Failed to persist contact submission: %s", exc)
+        raise HTTPException(
+            status_code=500,
+            detail="We couldn't save your request. Please try again or call us directly.",
+        )
+
+    # TODO: When RESEND_API_KEY is available, send an email notification to
+    # CONTACT_NOTIFICATION_EMAIL (default: theangelhc@gmail.com) and then
+    # update this document with emailSent=True.
+
+    logger.info(
+        "New contact submission %s (%s, partner=%s)",
+        doc["id"], doc["serviceType"], doc["isPartnerInquiry"],
+    )
+
+    thank_you = (
+        "Thanks for your interest in partnering — our team will reach out within 1-2 business days."
+        if payload.isPartnerInquiry
+        else "Thank you! A team member will follow up within 24 hours."
+    )
+    return ContactResponse(id=doc["id"], status="received", message=thank_you)
+
+
+@api_router.get("/contact", response_model=List[Contact])
+async def list_contacts(limit: int = 100):
+    items = await db.contacts.find({}, {"_id": 0}).sort("createdAt", -1).to_list(limit)
+    for item in items:
+        if isinstance(item.get("createdAt"), str):
+            item["createdAt"] = datetime.fromisoformat(item["createdAt"])
+    return items
+
 
 # Include the router in the main app
 app.include_router(api_router)
