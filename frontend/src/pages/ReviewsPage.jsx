@@ -17,8 +17,17 @@ import { toast } from 'sonner';
 import { companyInfo } from '../data/mock';
 
 const API_BASE = `${process.env.REACT_APP_BACKEND_URL}/api`;
+
+// --- Google Review CTA ---------------------------------------------------
+// Shown only on 4-5 star submissions WITH publish consent (see backend
+// routing === 'promote'). When you have the real review URL, set it once
+// in /app/frontend/.env as REACT_APP_GOOGLE_REVIEW_URL and restart the
+// frontend — no code change required. Until then the CTA falls back to a
+// Google search for the business so the button still works.
 const GOOGLE_REVIEW_URL =
-  'https://www.google.com/search?q=The+Angel+House+Cleaning+Plano+reviews#lrd';
+  process.env.REACT_APP_GOOGLE_REVIEW_URL ||
+  'https://www.google.com/search?q=The+Angel+House+Cleaning+Plano+reviews';
+const GOOGLE_REVIEW_IS_PLACEHOLDER = !process.env.REACT_APP_GOOGLE_REVIEW_URL;
 
 const emptyForm = {
   firstName: '',
@@ -353,6 +362,11 @@ const ThankYou = ({ submission, onReset }) => {
           <button onClick={onReset} className="btn-secondary py-3 px-6" data-testid="review-another-btn">
             Submit Another
           </button>
+          {GOOGLE_REVIEW_IS_PLACEHOLDER && (
+            <p className="text-[#a0a0b0] text-xs mt-4 w-full text-center" data-testid="google-review-placeholder-note">
+              Google review link coming soon — this button currently routes to a Google search for our business.
+            </p>
+          )}
         </div>
       )}
       {routing === 'thanks' && (
