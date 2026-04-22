@@ -20,10 +20,12 @@ const API_BASE = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 const emptyForm = {
   name: '',
+  businessName: '',
   email: '',
   phone: '',
   serviceType: 'commercial',
   propertyType: '',
+  squareFootage: '',
   frequency: '',
   message: '',
   isPartnerInquiry: false
@@ -40,6 +42,12 @@ const ContactPage = () => {
     if (params.get('partner') === 'true') {
       setIsPartner(true);
       setFormData(prev => ({ ...prev, isPartnerInquiry: true }));
+    }
+    if (params.get('intent') === 'walkthrough') {
+      setFormData(prev => ({
+        ...prev,
+        message: prev.message || 'I would like to schedule a walk-through of my facility.'
+      }));
     }
   }, [location]);
 
@@ -284,6 +292,24 @@ const ContactPage = () => {
                     </div>
                   </div>
 
+                  {formData.serviceType === 'commercial' && (
+                    <div>
+                      <label className="block text-white font-medium mb-2">
+                        Business Name {isPartner ? '*' : <span className="text-[#a0a0b0] font-normal text-sm">(optional)</span>}
+                      </label>
+                      <input
+                        type="text"
+                        name="businessName"
+                        value={formData.businessName}
+                        onChange={handleChange}
+                        required={isPartner}
+                        className="input-dark w-full"
+                        placeholder="Acme Professional Group"
+                        data-testid="contact-business-name-input"
+                      />
+                    </div>
+                  )}
+
                   {!isPartner && (
                     <div className="grid md:grid-cols-2 gap-6">
                       <div>
@@ -293,6 +319,7 @@ const ContactPage = () => {
                           value={formData.propertyType}
                           onChange={handleChange}
                           className="input-dark w-full"
+                          data-testid="contact-property-type-select"
                         >
                           <option value="">Select property type</option>
                           {formData.serviceType === 'commercial' ? (
@@ -300,7 +327,8 @@ const ContactPage = () => {
                               <option value="office">Office Building</option>
                               <option value="medical">Medical Office</option>
                               <option value="retail">Retail Space</option>
-                              <option value="professional">Professional Office</option>
+                              <option value="warehouse">Small Warehouse</option>
+                              <option value="professional">Professional Building</option>
                               <option value="other">Other Commercial</option>
                             </>
                           ) : (
@@ -320,6 +348,7 @@ const ContactPage = () => {
                           value={formData.frequency}
                           onChange={handleChange}
                           className="input-dark w-full"
+                          data-testid="contact-frequency-select"
                         >
                           <option value="">Select frequency</option>
                           <option value="one-time">One-Time Cleaning</option>
@@ -329,6 +358,29 @@ const ContactPage = () => {
                           <option value="custom">Custom Schedule</option>
                         </select>
                       </div>
+                    </div>
+                  )}
+
+                  {!isPartner && formData.serviceType === 'commercial' && (
+                    <div>
+                      <label className="block text-white font-medium mb-2">
+                        Approx. Square Footage <span className="text-[#a0a0b0] font-normal text-sm">(optional)</span>
+                      </label>
+                      <select
+                        name="squareFootage"
+                        value={formData.squareFootage}
+                        onChange={handleChange}
+                        className="input-dark w-full"
+                        data-testid="contact-square-footage-select"
+                      >
+                        <option value="">Select a range</option>
+                        <option value="under-2500">Under 2,500 sq ft</option>
+                        <option value="2500-5000">2,500 – 5,000 sq ft</option>
+                        <option value="5000-10000">5,000 – 10,000 sq ft</option>
+                        <option value="10000-25000">10,000 – 25,000 sq ft</option>
+                        <option value="25000-plus">25,000+ sq ft</option>
+                        <option value="not-sure">Not sure yet</option>
+                      </select>
                     </div>
                   )}
 

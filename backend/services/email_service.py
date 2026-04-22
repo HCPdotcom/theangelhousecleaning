@@ -40,10 +40,12 @@ def _build_html(submission: Mapping[str, Any]) -> str:
     kind = "Partner Inquiry" if submission.get("isPartnerInquiry") else "Quote Request"
     rows = [
         ("Name", submission.get("name", "")),
+        ("Business", submission.get("businessName", "") or "—"),
         ("Email", submission.get("email", "")),
         ("Phone", submission.get("phone", "")),
         ("Service Type", submission.get("serviceType", "")),
         ("Property Type", submission.get("propertyType", "") or "—"),
+        ("Square Footage", submission.get("squareFootage", "") or "—"),
         ("Frequency", submission.get("frequency", "") or "—"),
         ("Partner Inquiry", "Yes" if submission.get("isPartnerInquiry") else "No"),
         ("Submitted At", submission.get("createdAt", "")),

@@ -48,22 +48,21 @@ const CommercialPage = () => {
             </div>
             
             <h1 className="font-display text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight mb-6">
-              Commercial <span className="text-[#66CC33]">Cleaning</span>
+              Janitorial Built for <span className="text-[#66CC33]">Long-Term Contracts</span>
             </h1>
-            
+
             <p className="text-xl text-white/80 mb-8 leading-relaxed max-w-2xl">
-              Professional janitorial and office cleaning services designed for businesses across the DFW metroplex. Maintain a professional environment that impresses clients and boosts productivity.
+              Insured, consistent commercial cleaning for DFW offices, medical, retail, and professional buildings. Written scopes, dedicated teams, and service agreements that hold up month after month.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4">
-              <Link to="/contact" className="btn-primary text-lg py-4 px-8">
+              <Link to="/contact?intent=walkthrough" className="btn-primary text-lg py-4 px-8" data-testid="commercial-hero-walkthrough-btn">
                 Schedule a Walk-Through
                 <ArrowRight size={20} />
               </Link>
-              <a href={`tel:${companyInfo.phone}`} className="btn-secondary text-lg py-4 px-8">
-                <Phone size={20} />
-                Call Now
-              </a>
+              <Link to="/contact" className="btn-secondary text-lg py-4 px-8" data-testid="commercial-hero-quote-btn">
+                Request a Quote
+              </Link>
             </div>
           </div>
         </div>
@@ -149,7 +148,7 @@ const CommercialPage = () => {
                 Your Business Deserves Professional Care
               </h2>
               <p className="text-[#a0a0b0] text-lg mb-8 leading-relaxed">
-                A clean workspace isn't just about appearances—it impacts employee health, productivity, and client impressions. We understand that every business has unique needs.
+                A clean workspace isn't just about appearances — it reflects how your business runs. We treat every contract as a long-term relationship: written scopes, consistent crews, and an account manager who picks up the phone.
               </p>
 
               <div className="space-y-6">
@@ -158,8 +157,8 @@ const CommercialPage = () => {
                     <CheckCircle className="text-[#66CC33]" size={24} />
                   </div>
                   <div>
-                    <h3 className="text-white font-semibold text-lg mb-2">Consistency & Reliability</h3>
-                    <p className="text-[#a0a0b0]">We show up on time, every time. Your space will be consistently clean to the same high standards, allowing you to focus on your business.</p>
+                    <h3 className="text-white font-semibold text-lg mb-2">Consistency, In Writing</h3>
+                    <p className="text-[#a0a0b0]">A defined scope-of-work and scheduled cadence — the same standard held every visit, backed by a real service agreement.</p>
                   </div>
                 </div>
 
@@ -168,8 +167,8 @@ const CommercialPage = () => {
                     <CheckCircle className="text-[#66CC33]" size={24} />
                   </div>
                   <div>
-                    <h3 className="text-white font-semibold text-lg mb-2">Professional Appearance</h3>
-                    <p className="text-[#a0a0b0]">First impressions matter. We ensure your facility always looks its best for clients, customers, and employees alike.</p>
+                    <h3 className="text-white font-semibold text-lg mb-2">One Accountable Partner</h3>
+                    <p className="text-[#a0a0b0]">A dedicated account manager, consistent crews, and clear escalation paths — not a rotating cast of subcontractors.</p>
                   </div>
                 </div>
 
@@ -178,8 +177,8 @@ const CommercialPage = () => {
                     <CheckCircle className="text-[#66CC33]" size={24} />
                   </div>
                   <div>
-                    <h3 className="text-white font-semibold text-lg mb-2">Minimal Business Disruption</h3>
-                    <p className="text-[#a0a0b0]">With flexible day and night scheduling options, we work around your business hours to ensure zero disruption to your operations.</p>
+                    <h3 className="text-white font-semibold text-lg mb-2">Zero Business Disruption</h3>
+                    <p className="text-[#a0a0b0]">Flexible day and night scheduling fitted to your business hours — held reliably week after week.</p>
                   </div>
                 </div>
               </div>
@@ -198,12 +197,13 @@ const CommercialPage = () => {
             </h2>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-6">
             {[
               { name: 'Corporate Offices', icon: Building2, desc: 'From small offices to large corporate spaces' },
-              { name: 'Medical Facilities', icon: Stethoscope, desc: 'Healthcare-compliant cleaning standards' },
+              { name: 'Medical Offices', icon: Stethoscope, desc: 'Healthcare-compliant cleaning standards' },
               { name: 'Retail Spaces', icon: Sparkles, desc: 'Inviting spaces for customers' },
-              { name: 'Professional Offices', icon: Users, desc: 'Law firms, accounting, consulting' }
+              { name: 'Small Warehouses', icon: Building2, desc: 'Light-industrial and flex space' },
+              { name: 'Professional Buildings', icon: Users, desc: 'Law, finance, and consulting firms' }
             ].map((industry, index) => (
               <div key={index} className="card-dark p-8 text-center group">
                 <div className="w-16 h-16 rounded-full bg-[#191970] flex items-center justify-center mx-auto mb-6 group-hover:bg-[#66CC33] transition-colors">
@@ -213,6 +213,46 @@ const CommercialPage = () => {
                 <p className="text-[#a0a0b0] text-sm">{industry.desc}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Long-term Partnership */}
+      <section className="py-24 bg-[#12122a]" data-testid="commercial-partnership">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-12 items-start">
+            <div>
+              <span className="text-[#66CC33] font-semibold text-sm uppercase tracking-wider">Long-Term Partnerships</span>
+              <h2 className="font-display text-4xl md:text-5xl font-bold text-white mt-4 mb-6">
+                Contracts Built to Last, Not to Churn
+              </h2>
+              <p className="text-[#a0a0b0] text-lg leading-relaxed mb-6">
+                Our commercial clients stay with us for years — not because they have to, but because we show up, document the work, and hold our teams to the same written scope every single visit.
+              </p>
+              <p className="text-[#a0a0b0] text-lg leading-relaxed">
+                We're structured for property managers, office managers, and facility leads who need one accountable partner they can stop thinking about.
+              </p>
+            </div>
+
+            <div className="grid gap-4">
+              {[
+                { title: 'Written Scope of Work', desc: 'Every cleanable surface, every frequency — in writing before we start.' },
+                { title: 'Dedicated Account Manager', desc: 'One number, one person, one response window. No call-tree runaround.' },
+                { title: 'Monthly or Quarterly Reviews', desc: 'Scheduled check-ins to tune the scope as your building evolves.' },
+                { title: 'Flexible Agreement Terms', desc: 'Month-to-month or annual contracts sized to your facility and budget.' },
+                { title: 'Transparent Pricing', desc: 'Fixed monthly pricing with zero surprise line items.' }
+              ].map((item) => (
+                <div key={item.title} className="card-dark p-5 flex gap-4">
+                  <div className="w-10 h-10 rounded-lg bg-[#66CC33]/20 flex items-center justify-center flex-shrink-0">
+                    <CheckCircle className="text-[#66CC33]" size={20} />
+                  </div>
+                  <div>
+                    <h3 className="text-white font-semibold mb-1">{item.title}</h3>
+                    <p className="text-[#a0a0b0] text-sm leading-relaxed">{item.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>

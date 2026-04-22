@@ -78,7 +78,9 @@ class ContactCreate(BaseModel):
     email: EmailStr
     phone: str = Field(min_length=5, max_length=40)
     serviceType: str = Field(pattern="^(commercial|residential)$")
+    businessName: Optional[str] = ""
     propertyType: Optional[str] = ""
+    squareFootage: Optional[str] = ""
     frequency: Optional[str] = ""
     message: Optional[str] = ""
     isPartnerInquiry: bool = False
@@ -92,7 +94,9 @@ class Contact(BaseModel):
     email: EmailStr
     phone: str
     serviceType: str
+    businessName: Optional[str] = ""
     propertyType: Optional[str] = ""
+    squareFootage: Optional[str] = ""
     frequency: Optional[str] = ""
     message: Optional[str] = ""
     isPartnerInquiry: bool = False
@@ -122,7 +126,9 @@ async def create_contact(payload: ContactCreate):
         "email": payload.email.lower().strip(),
         "phone": payload.phone.strip(),
         "serviceType": payload.serviceType,
+        "businessName": (payload.businessName or "").strip(),
         "propertyType": (payload.propertyType or "").strip(),
+        "squareFootage": (payload.squareFootage or "").strip(),
         "frequency": (payload.frequency or "").strip(),
         "message": (payload.message or "").strip(),
         "isPartnerInquiry": payload.isPartnerInquiry,
