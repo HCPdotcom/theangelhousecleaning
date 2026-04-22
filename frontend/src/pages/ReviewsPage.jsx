@@ -11,7 +11,8 @@ import {
   ExternalLink,
   Phone,
   Building2,
-  Home as HomeIcon
+  Home as HomeIcon,
+  ArrowRight
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { companyInfo } from '../data/mock';
@@ -180,11 +181,13 @@ const ReviewsPage = () => {
         </div>
       </section>
 
-      {/* Form / Thank-you state */}
+      {/* Form / Picker / Thank-you state */}
       <section className="py-24 bg-[#12122a]">
         <div className="max-w-3xl mx-auto px-6 lg:px-8">
           {submission ? (
             <ThankYou submission={submission} onReset={resetSubmission} />
+          ) : !initialType ? (
+            <ClientTypePicker />
           ) : (
             <div className="card-dark p-8 md:p-10" data-testid="review-form-card">
               <h2 className="font-display text-2xl font-bold text-white mb-2">Leave a Review</h2>
@@ -414,5 +417,52 @@ const ThankYou = ({ submission, onReset }) => {
     </div>
   );
 };
+
+const ClientTypePicker = () => (
+  <div className="text-center" data-testid="client-type-picker">
+    <h2 className="font-display text-3xl md:text-4xl font-bold text-white mb-4">
+      Tell us about your experience
+    </h2>
+    <p className="text-[#a0a0b0] leading-relaxed max-w-xl mx-auto mb-10">
+      A few quick questions help us route your feedback to the right team — residential and commercial flows are a little different. Pick whichever fits, and we'll take it from there.
+    </p>
+
+    <div className="grid sm:grid-cols-2 gap-5 max-w-2xl mx-auto">
+      <Link
+        to="/feedback?type=residential"
+        className="card-dark p-8 text-left hover:border-[#66CC33]/60 transition-all group"
+        data-testid="client-type-residential-card"
+      >
+        <div className="w-14 h-14 rounded-xl bg-[#191970] flex items-center justify-center mb-5 group-hover:bg-[#66CC33] transition-colors">
+          <HomeIcon className="text-[#66CC33] group-hover:text-[#0a0a1a] transition-colors" size={28} />
+        </div>
+        <h3 className="text-white font-bold text-lg mb-2">Residential Client</h3>
+        <p className="text-[#a0a0b0] text-sm leading-relaxed mb-4">
+          Share how we're doing in your home — recurring, deep, or move-in / move-out cleaning.
+        </p>
+        <span className="inline-flex items-center gap-2 text-[#66CC33] text-sm font-semibold group-hover:gap-3 transition-all">
+          Continue <ArrowRight size={16} />
+        </span>
+      </Link>
+
+      <Link
+        to="/feedback?type=commercial"
+        className="card-dark p-8 text-left hover:border-[#66CC33]/60 transition-all group"
+        data-testid="client-type-commercial-card"
+      >
+        <div className="w-14 h-14 rounded-xl bg-[#191970] flex items-center justify-center mb-5 group-hover:bg-[#66CC33] transition-colors">
+          <Building2 className="text-[#66CC33] group-hover:text-[#0a0a1a] transition-colors" size={28} />
+        </div>
+        <h3 className="text-white font-bold text-lg mb-2">Commercial Client</h3>
+        <p className="text-[#a0a0b0] text-sm leading-relaxed mb-4">
+          Tell us how our team has supported your facility — offices, medical, retail, or government.
+        </p>
+        <span className="inline-flex items-center gap-2 text-[#66CC33] text-sm font-semibold group-hover:gap-3 transition-all">
+          Continue <ArrowRight size={16} />
+        </span>
+      </Link>
+    </div>
+  </div>
+);
 
 export default ReviewsPage;
