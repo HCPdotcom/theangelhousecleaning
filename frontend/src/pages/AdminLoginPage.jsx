@@ -47,7 +47,7 @@ const AdminLoginPage = () => {
             <label className="block text-white font-medium mb-2">Email</label>
             <input
               type="email" required value={email} onChange={(e) => setEmail(e.target.value)}
-              className="input-dark w-full" placeholder="admin@theangelhousecleaning.com"
+              className="input-dark w-full" placeholder="theangelhc@gmail.com"
               data-testid="admin-login-email-input"
               autoComplete="email"
             />
