@@ -64,11 +64,11 @@ const HomePage = () => {
           <div className="max-w-3xl">
             <div className="inline-flex items-center gap-2 bg-[#66CC33]/20 border border-[#66CC33]/30 rounded-full px-4 py-2 mb-6">
               <Sparkles size={16} className="text-[#66CC33]" />
-              <span className="text-[#66CC33] text-sm font-medium">Professional Cleaning Since 2005</span>
+              <span className="text-[#66CC33] text-sm font-medium">Professional Cleaning Since 2005 • Serving North Dallas &amp; Surrounding Areas</span>
             </div>
 
             <h1 className="font-display text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight mb-6">
-              Your Trusted Commercial <span className="text-[#66CC33]">&amp; Residential Cleaning Partner</span> Across Dallas &amp; North Dallas
+              Your Trusted Commercial <span className="text-[#66CC33]">&amp; Residential Cleaning Partner</span>
             </h1>
 
             <p className="text-xl text-white/80 mb-8 leading-relaxed max-w-2xl">
