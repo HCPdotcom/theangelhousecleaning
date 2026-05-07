@@ -394,6 +394,18 @@ async def moderate_review(
 # Include the router in the main app
 app.include_router(api_router)
 
+
+# ---------------------------------------------------------------------------
+# Container health probes (Kubernetes liveness/readiness)
+# These are intentionally registered on the root app (NOT under /api) because
+# the platform probes hit GET /health directly on the container.
+# ---------------------------------------------------------------------------
+
+@app.get("/health")
+@app.get("/api/health")
+async def health_check():
+    return {"status": "ok"}
+
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
