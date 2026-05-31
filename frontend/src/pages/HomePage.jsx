@@ -85,20 +85,7 @@ const HomePage = () => {
               </Link>
             </div>
 
-            {/* Designation badges */}
-            <div className="flex flex-wrap items-center gap-3 mt-10" data-testid="hero-designations">
-              <span className="inline-flex items-center gap-2 bg-[#191970]/80 border border-[#66CC33]/40 text-white text-xs font-semibold rounded-full px-3 py-1.5 backdrop-blur">
-                <UserCheck size={14} className="text-[#66CC33]" /> Woman-Owned
-              </span>
-              <span className="inline-flex items-center gap-2 bg-[#191970]/80 border border-[#66CC33]/40 text-white text-xs font-semibold rounded-full px-3 py-1.5 backdrop-blur">
-                <Users size={14} className="text-[#66CC33]" /> Minority-Owned
-              </span>
-              <span className="inline-flex items-center gap-2 bg-[#191970]/80 border border-[#66CC33]/40 text-white text-xs font-semibold rounded-full px-3 py-1.5 backdrop-blur">
-                <Shield size={14} className="text-[#66CC33]" /> Fully Insured &amp; Bonded
-              </span>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-8 mt-8 pt-6 border-t border-white/10">
+            <div className="flex flex-wrap items-center gap-8 mt-10 pt-6 border-t border-white/10">
               <div className="flex items-center gap-2">
                 <Shield className="text-[#66CC33]" size={22} />
                 <span className="text-white/80 text-sm">Insured Operations</span>
@@ -302,9 +289,9 @@ const HomePage = () => {
                   A single-page overview of our services, designations, service area, NAICS codes, and points of contact — prepared for procurement teams, property managers, and government buyers.
                 </p>
                 <div className="flex flex-wrap gap-2 mt-5">
-                  <span className="text-xs font-semibold bg-[#191970] text-white border border-[#66CC33]/30 px-3 py-1 rounded-full">Woman-Owned</span>
-                  <span className="text-xs font-semibold bg-[#191970] text-white border border-[#66CC33]/30 px-3 py-1 rounded-full">Minority-Owned</span>
-                  <span className="text-xs font-semibold bg-[#191970] text-white border border-[#66CC33]/30 px-3 py-1 rounded-full">Insured &amp; Bonded</span>
+                  <span className="text-xs font-semibold bg-[#191970] text-white border border-[#66CC33]/30 px-3 py-1 rounded-full">Commercial Janitorial</span>
+                  <span className="text-xs font-semibold bg-[#191970] text-white border border-[#66CC33]/30 px-3 py-1 rounded-full">Medical &amp; Dental</span>
+                  <span className="text-xs font-semibold bg-[#191970] text-white border border-[#66CC33]/30 px-3 py-1 rounded-full">Educational &amp; Government</span>
                 </div>
               </div>
               <div className="flex md:justify-end">
